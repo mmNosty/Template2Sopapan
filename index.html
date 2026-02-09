@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Valentine's Day My Love</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600&family=Caveat:wght@700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Prompt', sans-serif;
+            background-color: #fff5f5;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+        .handwriting {
+            font-family: 'Caveat', cursive;
+        }
+        .heart {
+            position: fixed;
+            top: -1vh;
+            transform: translateY(0);
+            animation: fall 3s linear forwards;
+            color: #ff4d6d;
+            z-index: 0;
+        }
+        @keyframes fall {
+            to { transform: translateY(105vh); }
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 192, 203, 0.3);
+            border-radius: 20px;
+        }
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+        }
+        @keyframes floating {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Envelope Design */
+        .envelope-container {
+            position: relative;
+            width: 300px;
+            height: 200px;
+            background: #f08080;
+            border-radius: 0 0 10px 10px;
+            cursor: pointer;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            margin: 0 auto;
+        }
+        .envelope-container::before {
+            content: "";
+            position: absolute;
+            z-index: 20;
+            border-left: 150px solid transparent;
+            border-right: 150px solid transparent;
+            border-bottom: 100px solid #f4978e;
+            bottom: 0;
+            border-radius: 0 0 10px 10px;
+        }
+        .envelope-container::after {
+            content: "";
+            position: absolute;
+            z-index: 20;
+            border-top: 100px solid transparent;
+            border-left: 150px solid #ffb5a7;
+            border-bottom: 100px solid transparent;
+            left: 0;
+            top: 0;
+        }
+        .side-flap-right {
+            position: absolute;
+            z-index: 20;
+            border-top: 100px solid transparent;
+            border-right: 150px solid #ffb5a7; 
+            border-bottom: 100px solid transparent;
+            right: 0;
+            top: 0;
+        }
+        .flap {
+            position: absolute;
+            top: 0;
+            width: 0;
+            height: 0;
+            border-left: 150px solid transparent;
+            border-right: 150px solid transparent;
+            border-top: 100px solid #f08080;
+            transform-origin: top;
+            transition: transform 0.4s 0.4s ease;
+            z-index: 30;
+        }
+        .letter {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 260px;
+            height: 180px;
+            background: white;
+            z-index: 10;
+            transition: transform 0.5s ease, height 0.5s ease;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.05);
+            overflow: hidden;
+        }
+        .envelope-container.open .flap {
+            transform: rotateX(180deg);
+            transition: transform 0.4s ease;
+            z-index: 5;
+        }
+        .envelope-container.open .letter {
+            transform: translate(-50%, -100px);
+            height: 350px;
+            transition: transform 0.5s 0.4s ease, height 0.5s 0.4s ease;
+            z-index: 25;
+            overflow-y: auto;
+        }
+        .heart-sticker {
+            position: absolute;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #ff4d6d;
+            font-size: 30px;
+            z-index: 40;
+            transition: opacity 0.3s 0.2s ease;
+        }
+        .envelope-container.open .heart-sticker {
+            opacity: 0;
+        }
+
+        /* Gallery/Polaroid */
+        .polaroid {
+            background: white;
+            padding: 10px 10px 30px 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transform: rotate(-2deg);
+            transition: all 0.3s ease;
+        }
+        .polaroid:nth-child(even) {
+            transform: rotate(3deg);
+        }
+        .polaroid:hover {
+            transform: scale(1.05) rotate(0deg);
+            z-index: 30;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        #music-player {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body class="text-gray-800" onclick="startMusicOnInteraction()">
+
+    <div id="hearts-container"></div>
+
+    <!-- Music Player Overlay -->
+    <div id="music-player" class="glass-card p-3 flex items-center space-x-3 shadow-lg opacity-90 hover:opacity-100">
+        <button id="play-btn" onclick="toggleMusic(event)" class="bg-red-500 text-white p-2 rounded-full hover:bg-red-600 transition">
+            <svg id="play-icon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+        </button>
+		
+        <!-- Replace the source URL with your actual music file link -->
+        <audio id="bg-music" loop preload="auto">
+            <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+        </audio>
+    </div>
+
+    <!-- 1. Hero Section -->
+    <section class="min-h-screen flex flex-col items-center justify-center relative z-10 p-6 text-center">
+        <div class="floating mb-6">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-20 w-20 text-red-500 mx-auto" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+            </svg>
+        </div>
+        <h1 class="text-4xl md:text-6xl font-bold text-red-600 mb-4">Happy Valentine's Day</h1>
+        <p class="text-xl md:text-2xl text-pink-500 mb-8 handwriting text-3xl">คนเก่งของฉัน</p>
+        
+        <div class="glass-card p-6 shadow-xl max-w-md w-full mb-10">
+            <h2 class="text-lg font-semibold mb-4 text-gray-600 uppercase tracking-widest">เราเดินข้างกันมาแล้ว...</h2>
+            <div id="timer" class="grid grid-cols-4 gap-2 text-red-500 font-bold">
+                <div class="flex flex-col"><span id="days" class="text-2xl">-</span><span class="text-xs text-gray-400">วัน</span></div>
+                <div class="flex flex-col"><span id="hours" class="text-2xl">-</span><span class="text-xs text-gray-400">ชม.</span></div>
+                <div class="flex flex-col"><span id="minutes" class="text-2xl">-</span><span class="text-xs text-gray-400">นาที</span></div>
+                <div class="flex flex-col"><span id="seconds" class="text-2xl">-</span><span class="text-xs text-gray-400">วินาที</span></div>
+            </div>
+        </div>
+
+        <nav class="flex space-x-6 text-sm font-semibold text-pink-600">
+            <a href="#letter-section" class="hover:text-red-500">จดหมาย</a>
+            <a href="#gallery-section" class="hover:text-red-500">ความทรงจำ</a>
+            <a href="#vouchers-section" class="hover:text-red-500">คูปอง</a>
+        </nav>
+    </section>
+
+    <!-- 2. Letter Section -->
+    <section id="letter-section" class="min-h-screen flex flex-col items-center justify-center p-6 bg-pink-50 relative z-10 overflow-hidden">
+        <h2 class="text-3xl font-bold text-pink-600 mb-16">จดหมายถึงคุณ</h2>
+        
+        <div id="envelope" class="envelope-container" onclick="toggleLetter()">
+            <div class="flap"></div>
+            <div class="side-flap-right"></div>
+            <div class="heart-sticker">❤️</div>
+            <div class="letter" id="letter">
+                <p class="handwriting text-2xl mb-4 text-pink-600">ที่รัก...</p>
+                <div class="text-gray-600 text-sm leading-relaxed">
+                    <p class="mb-4 text-center italic">"You are my favorite person."</p>
+                    <p class="mb-4 text-center">[Image of Love Symbol]</p>
+                    <p class="mb-4">ขอบคุณนะที่เป็นความสุขให้กันในทุกวัน ตั้งแต่วันแรกที่เราเจอกันจนถึงวันนี้ คุณคือคนที่ดีที่สุดสำหรับเราเสมอ</p>
+                    <p class="mb-4 text-pink-500 font-bold">"ขอบคุณที่คอยซัพพอร์ตและเป็นรอยยิ้มให้เราตลอดนะ"</p>
+                    <p class="mb-4">วันวาเลนไทน์นี้ไม่มีอะไรจะให้นอกจากหัวใจดวงนี้และสัญญาว่าจะดูแลคุณให้ดีที่สุดครับ</p>
+                    <p class="mb-6">รักคุณมากที่สุดเลยนะ</p>
+                    <p class="handwriting text-right text-xl text-pink-600">- จาก คนสวย</p>
+                </div>
+            </div>
+        </div>
+        <p class="mt-32 text-gray-400 text-sm italic">แตะที่ซองจดหมายเพื่อเปิดอ่าน</p>
+    </section>
+
+    <!-- 3. Gallery Section -->
+    <section id="gallery-section" class="min-h-screen py-20 px-6 relative z-10 bg-white">
+        <h2 class="text-3xl font-bold text-pink-600 text-center mb-4">Our Memories</h2>
+        <p class="text-center text-gray-500 mb-12">ช่วงเวลาดีๆ ของเราสองคน</p>
+        
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+            <!-- Polaroid 1 -->
+            <div class="polaroid">
+                <img src="img1.jpg" alt="Memory 1" class="w-full h-64 object-cover mb-2">
+                <p class="handwriting text-center text-lg text-gray-700">ความรัก</p>
+            </div>
+            <!-- Polaroid 2 -->
+            <div class="polaroid">
+                <img src="img2.jpg" alt="Memory 2" class="w-full h-64 object-cover mb-2">
+                <p class="handwriting text-center text-lg text-gray-700">หัวใจของฉัน</p>
+            </div>
+            <!-- Polaroid 3 -->
+            <div class="polaroid">
+                <img src="img3.jpg" alt="Memory 3" class="w-full h-64 object-cover mb-2">
+                <p class="handwriting text-center text-lg text-gray-700">เราสองสามคน</p>
+            </div>
+        </div>
+        <p class="text-center mt-12 text-gray-400 text-xs italic">เลื่อนลงเพื่อดูของขวัญพิเศษ</p>
+    </section>
+
+    <!-- 4. Vouchers Section -->
+    <section id="vouchers-section" class="min-h-screen py-20 px-6 relative z-10 bg-pink-50">
+        <div class="max-w-4xl mx-auto">
+            <h2 class="text-3xl font-bold text-red-600 text-center mb-4 uppercase tracking-widest">Love Vouchers</h2>
+            <p class="text-center text-gray-500 mb-12 italic">คูปองพิเศษสำหรับคุณคนเดียว แลกได้จริง!</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-white p-6 rounded-2xl shadow-lg border-2 border-dashed border-pink-300 text-center">
+                    <h3 class="font-bold text-xl text-pink-600 mb-2">มื้อเย็นตามใจ</h3>
+                    <p class="text-gray-500 text-sm mb-4">เลือกได้เลยอยากกินอะไร เราเปย์เอง!</p>
+                    <button onclick="useCoupon(this, 'มื้อเย็นตามใจ')" class="w-full bg-pink-100 text-pink-600 py-2 rounded-xl font-bold">แลกสิทธิ์</button>
+                </div>
+                <div class="bg-white p-6 rounded-2xl shadow-lg border-2 border-dashed border-red-300 text-center">
+                    <h3 class="font-bold text-xl text-red-600 mb-2">กอดฟรีไม่จำกัด</h3>
+                    <p class="text-gray-500 text-sm mb-4">ใช้ได้ทุกเมื่อที่ต้องการกำลังใจ ❤️</p>
+                    <button onclick="useCoupon(this, 'กอดฟรี')" class="w-full bg-red-100 text-red-600 py-2 rounded-xl font-bold">แลกสิทธิ์</button>
+                </div>
+                <div class="bg-white p-6 rounded-2xl shadow-lg border-2 border-dashed border-purple-300 text-center">
+                    <h3 class="font-bold text-xl text-purple-600 mb-2">งดบ่น 1 วัน</h3>
+                    <p class="text-gray-500 text-sm mb-4">วันนี้ตามใจแฟนสุดๆ ทำอะไรก็ถูกไปหมด!</p>
+                    <button onclick="useCoupon(this, 'งดบ่น 1 วัน')" class="w-full bg-purple-100 text-purple-600 py-2 rounded-xl font-bold">แลกสิทธิ์</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="py-10 text-center text-gray-400 text-sm bg-white border-t">
+       
+        <p class="mt-2 text-xs">Happy Valentine's Day 2026</p>
+    </footer>
+
+    <!-- Alert Box -->
+    <div id="custom-alert" class="fixed inset-0 bg-black/50 flex items-center justify-center z-[200] hidden p-6">
+        <div class="bg-white p-8 rounded-3xl max-w-sm w-full text-center shadow-2xl">
+            <div class="text-5xl mb-4">🎁</div>
+            <h3 class="text-xl font-bold mb-2">แลกสิทธิ์สำเร็จ!</h3>
+            <p class="text-gray-500 mb-6" id="alert-msg"></p>
+            <button onclick="closeAlert()" class="bg-red-500 text-white px-8 py-2 rounded-full font-bold shadow-lg hover:bg-red-600 transition w-full">โอเคเลย!</button>
+        </div>
+    </div>
+
+    <script>
+        // 2. Relationship Timer
+        // EDIT HERE: (Year, Month-1, Day)
+        const startDate = new Date(2024, 0, 1); 
+
+        function updateTimer() {
+            const now = new Date();
+            const diff = now - startDate;
+            document.getElementById('days').innerText = Math.floor(diff / (1000 * 60 * 60 * 24));
+            document.getElementById('hours').innerText = Math.floor((diff / (1000 * 60 * 60)) % 24);
+            document.getElementById('minutes').innerText = Math.floor((diff / 1000 / 60) % 60);
+            document.getElementById('seconds').innerText = Math.floor((diff / 1000) % 60);
+        }
+        setInterval(updateTimer, 1000);
+        updateTimer();
+
+        // 3. Falling Hearts Effect
+        function createHeart() {
+            const container = document.getElementById('hearts-container');
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.innerHTML = '❤️';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.fontSize = (Math.random() * 20 + 10) + 'px';
+            heart.style.opacity = Math.random();
+            heart.style.animationDuration = (Math.random() * 3 + 2) + 's';
+            container.appendChild(heart);
+            setTimeout(() => heart.remove(), 5000);
+        }
+        setInterval(createHeart, 300);
+
+        // 4. Envelope Toggle
+        function toggleLetter() {
+            document.getElementById('envelope').classList.toggle('open');
+        }
+
+        // 5. Coupon Logic
+        function useCoupon(btn, name) {
+            document.getElementById('alert-msg').innerText = `แคปหน้าจอนี้ส่งมาให้เค้าเพื่อแลกสิทธิ์ "${name}" ได้เลยนะคะ!`;
+            document.getElementById('custom-alert').classList.remove('hidden');
+            btn.innerText = 'ใช้แล้ว';
+            btn.disabled = true;
+            btn.classList.replace('text-pink-600', 'text-gray-400');
+            btn.classList.replace('bg-pink-100', 'bg-gray-200');
+        }
+
+        function closeAlert() {
+            document.getElementById('custom-alert').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
